@@ -27,3 +27,24 @@ class Program
       Console.WriteLine($"{myCylinder.GetVolume()}");
    }
 }
+
+public void WriteToFile(string filename)
+{
+   usign (StreamWriter outputFile = new StreamWriter(filename))
+   {
+      foreach(JournalEntry entry in entries)
+      {
+         outputFile.WriteLine(entry.ToString());
+      }
+   }
+}
+
+class Program 
+{
+   private 
+
+   static void Main(string[] args)
+   {
+      Journal newJournal = new Journal;
+   }
+}
