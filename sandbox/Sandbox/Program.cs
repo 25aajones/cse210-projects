@@ -1,7 +1,6 @@
 using System;
 using System.Security.Cryptography.X509Certificates;
 
-
 class Program
 {
    static void Main(string[] args)
@@ -28,23 +27,23 @@ class Program
    }
 }
 
-public void WriteToFile(string filename)
-{
-   usign (StreamWriter outputFile = new StreamWriter(filename))
-   {
-      foreach(JournalEntry entry in entries)
-      {
-         outputFile.WriteLine(entry.ToString());
-      }
-   }
-}
+// public void WriteToFile(string filename)
+// {
+//    usign (StreamWriter outputFile = new StreamWriter(filename))
+//    {
+//       foreach(JournalEntry entry in entries)
+//       {
+//          outputFile.WriteLine(entry.ToString());
+//       }
+//    }
+// }
 
-class Program 
-{
-   private 
+// class Program 
+// {
+//    private 
 
-   static void Main(string[] args)
-   {
-      Journal newJournal = new Journal;
-   }
-}
+//    static void Main(string[] args)
+//    {
+//       Journal newJournal = new Journal;
+//    }
+// }
