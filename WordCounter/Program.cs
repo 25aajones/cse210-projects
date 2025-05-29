@@ -5,8 +5,12 @@ class Program
     {
         Console.WriteLine("Hello, World!");
 
-        WordCounter wordCounter = new WordCounter("The quick brown fox jumps over the lazy dog");
+        WordCounter wordCounter = new WordCounter("The quick brown fox jumps over the quick lazy dog");
         wordCounter.DisplayWords();
+
+        int count = wordCounter.CountSingleWord("quick");
+
+        Console.WriteLine($"The word: quick is found {count} time(s)");
     }
 }
 
