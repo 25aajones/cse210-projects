@@ -8,7 +8,7 @@ class GratitudeActivity : BaseActivity
     public GratitudeActivity(string name, string description)
         : base(name, description)
     {
-        _duration = 30; // hardcoded duration in seconds
+        _duration = 30; 
     }
 
     protected override void OnStart()

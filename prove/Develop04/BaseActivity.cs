@@ -65,7 +65,6 @@ abstract class BaseActivity
         Console.Write("\r   \r");
     }
 
-    // Shown like: 3 2 1 (on the same line, overwriting itself)
     protected void Countdown(int seconds)
     {
         for (int i = seconds; i > 0; i--)
