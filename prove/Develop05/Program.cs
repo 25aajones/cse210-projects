@@ -2,8 +2,15 @@ using System;
 
 class Program
 {
-    static void Main(string[] args)
+    static void Main()
     {
-        Console.WriteLine("Hello Develop05 World!");
+        Goals goalManager = new Goals();
+        int choice;
+        do
+        {
+            Menu.Display(goalManager.GetScore());
+            choice = Menu.GetChoice();
+            goalManager.HandleChoice(choice);
+        } while (choice != 6);
     }
 }
