@@ -1,19 +1,34 @@
-public class WordFlashcard : Flashcard
+using System;
+
+namespace FinalProject
 {
-    public string Example { get; set; }
-    public string PartOfSpeech { get; set; }
-
-    public WordFlashcard(string chinese, string pinyin, string english, int level, string example, string pos)
-        : base(chinese, pinyin, english, level)
+    public class WordFlashcard : Flashcard
     {
-        Example = example;
-        PartOfSpeech = pos;
-    }
+        public string Example { get; set; }
+        public string PartOfSpeech { get; set; }
 
-    public override void ShowBack()
-    {
-        base.ShowBack();
-        Console.WriteLine($"Example: {Example}");
-        Console.WriteLine($"Part of Speech: {PartOfSpeech}");
+        public WordFlashcard(int id, string chinese, string pinyin, string english, int hskLevel, string example, string partOfSpeech)
+            : base(id, chinese, pinyin, english, hskLevel)
+        {
+            Example = example;
+            PartOfSpeech = partOfSpeech;
+        }
+
+        public override void ShowFront()
+        {
+            Console.WriteLine($"[Word] {Chinese} ({Pinyin})");
+        }
+
+        public override void ShowBack()
+        {
+            Console.WriteLine($"English: {English}, HSK Level: {HSKLevel}");
+            Console.WriteLine($"Part of Speech: {PartOfSpeech}");
+            Console.WriteLine($"Example: {Example}");
+        }
+
+        public void ShowExampleSentence()
+        {
+            Console.WriteLine($"Example Sentence: {Example}");
+        }
     }
 }

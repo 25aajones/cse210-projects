@@ -1,18 +1,33 @@
-public class CharacterFlashcard : Flashcard
+using System;
+
+namespace FinalProject
 {
-    public string Radical { get; set; }
-    public int StrokeCount { get; set; }
-
-    public CharacterFlashcard(string chinese, string pinyin, string english, int level, string radical, int strokes)
-        : base(chinese, pinyin, english, level)
+    public class CharacterFlashcard : Flashcard
     {
-        Radical = radical;
-        StrokeCount = strokes;
-    }
+        public string Radical { get; set; }
+        public int StrokeCount { get; set; }
 
-    public override void ShowBack()
-    {
-        base.ShowBack();
-        Console.WriteLine($"Radical: {Radical}, Strokes: {StrokeCount}");
+        public CharacterFlashcard(int id, string chinese, string pinyin, string english, int hskLevel, string radical, int strokeCount)
+            : base(id, chinese, pinyin, english, hskLevel)
+        {
+            Radical = radical;
+            StrokeCount = strokeCount;
+        }
+
+        public override void ShowFront()
+        {
+            Console.WriteLine($"[Character] {Chinese} ({Pinyin})");
+        }
+
+        public override void ShowBack()
+        {
+            Console.WriteLine($"English: {English}, HSK Level: {HSKLevel}");
+            Console.WriteLine($"Radical: {Radical}, Strokes: {StrokeCount}");
+        }
+
+        public void ShowRadicalInfo()
+        {
+            Console.WriteLine($"Radical: {Radical}, Stroke Count: {StrokeCount}");
+        }
     }
 }

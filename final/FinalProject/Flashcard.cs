@@ -1,25 +1,25 @@
-public abstract class Flashcard
+using System;
+
+namespace FinalProject
 {
-    public string Chinese { get; set; }
-    public string Pinyin { get; set; }
-    public string English { get; set; }
-    public int HSKLevel { get; set; }
-
-    public Flashcard(string chinese, string pinyin, string english, int level)
+    public abstract class Flashcard
     {
-        Chinese = chinese;
-        Pinyin = pinyin;
-        English = english;
-        HSKLevel = level;
-    }
+        public int Id { get; set; }
+        public string Chinese { get; set; }
+        public string Pinyin { get; set; }
+        public string English { get; set; }
+        public int HSKLevel { get; set; }
 
-    public virtual void ShowFront()
-    {
-        Console.WriteLine($"Word: {Chinese} ({Pinyin})");
-    }
+        public Flashcard(int id, string chinese, string pinyin, string english, int hskLevel)
+        {
+            Id = id;
+            Chinese = chinese;
+            Pinyin = pinyin;
+            English = english;
+            HSKLevel = hskLevel;
+        }
 
-    public virtual void ShowBack()
-    {
-        Console.WriteLine($"Meaning: {English} - HSK Level {HSKLevel}");
+        public abstract void ShowFront();
+        public abstract void ShowBack();
     }
 }

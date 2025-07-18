@@ -1,0 +1,42 @@
+[
+  {
+    "Type": "Character",
+    "Id": 1,
+    "Chinese": "好",
+    "Pinyin": "hǎo",
+    "English": "good",
+    "HSKLevel": 1,
+    "Radical": "女",
+    "StrokeCount": 6
+  },
+  {
+    "Type": "Character",
+    "Id": 2,
+    "Chinese": "学",
+    "Pinyin": "xué",
+    "English": "learn",
+    "HSKLevel": 1,
+    "Radical": "子",
+    "StrokeCount": 8
+  },
+  {
+    "Type": "Word",
+    "Id": 3,
+    "Chinese": "学习",
+    "Pinyin": "xuéxí",
+    "English": "study",
+    "HSKLevel": 1,
+    "Example": "我喜欢学习中文。",
+    "PartOfSpeech": "verb"
+  },
+  {
+    "Type": "Word",
+    "Id": 4,
+    "Chinese": "老师",
+    "Pinyin": "lǎoshī",
+    "English": "teacher",
+    "HSKLevel": 1,
+    "Example": "我的老师很好。",
+    "PartOfSpeech": "noun"
+  }
+]

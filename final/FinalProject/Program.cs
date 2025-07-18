@@ -1,68 +1,34 @@
 using System;
-using System.Collections.Generic;
 
-class Program
+namespace FinalProject
 {
-    static void Main(string[] args)
+    class Program
     {
-        List<Flashcard> flashcards = new();
-
-        Console.WriteLine("How many flashcards would you like to create?");
-        if (int.TryParse(Console.ReadLine(), out int count))
+        static void Main(string[] args)
         {
-            for (int i = 0; i < count; i++)
+            Console.WriteLine("Welcome to the Chinese Flashcard App!");
+
+            var userManager = new UserManager();
+            userManager.LoadAllUsers();
+
+            Console.Write("Enter your username: ");
+            string username = Console.ReadLine();
+
+            var user = userManager.Login(username);
+            if (user == null)
             {
-                Console.WriteLine($"\nFlashcard #{i + 1}:");
-                Console.Write("Type (1 = Character, 2 = Word): ");
-                string type = Console.ReadLine();
-
-                Console.Write("Chinese: ");
-                string chinese = Console.ReadLine();
-
-                Console.Write("Pinyin: ");
-                string pinyin = Console.ReadLine();
-
-                Console.Write("English: ");
-                string english = Console.ReadLine();
-
-                Console.Write("HSK Level: ");
-                int hsk = int.Parse(Console.ReadLine());
-
-                if (type == "1")
+                Console.Write("New user detected. Set your daily goal: ");
+                int dailyGoal = int.Parse(Console.ReadLine());
+                bool registered = userManager.Register(username, dailyGoal);
+                if (!registered)
                 {
-                    Console.Write("Radical: ");
-                    string radical = Console.ReadLine();
-
-                    Console.Write("Stroke Count: ");
-                    int strokes = int.Parse(Console.ReadLine());
-
-                    flashcards.Add(new CharacterFlashcard(chinese, pinyin, english, hsk, radical, strokes));
+                    Console.WriteLine("Registration failed. Username may already exist.");
+                    return;
                 }
-                else
-                {
-                    Console.Write("Example Sentence: ");
-                    string example = Console.ReadLine();
-
-                    Console.Write("Part of Speech: ");
-                    string pos = Console.ReadLine();
-
-                    flashcards.Add(new WordFlashcard(chinese, pinyin, english, hsk, example, pos));
-                }
+                user = userManager.Login(username);
             }
 
-            Console.WriteLine("\n--- Study Session ---\n");
-            foreach (var card in flashcards)
-            {
-                card.ShowFront();
-                Console.WriteLine("Press Enter to see the back...");
-                Console.ReadLine();
-                card.ShowBack();
-                Console.WriteLine("\n----------------------\n");
-            }
-        }
-        else
-        {
-            Console.WriteLine("Invalid number. Exiting.");
+            MainMenu.Show(user);
         }
     }
 }
