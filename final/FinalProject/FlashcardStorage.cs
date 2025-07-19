@@ -1,59 +1,50 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text.Json;
+using Newtonsoft.Json;
 
-namespace FinalProject
+public class FlashcardStorage
 {
-    public static class FlashcardStorage
+    private readonly string builtInPath = "data/built_in_flashcards.json";
+    private readonly string userFlashcardsPath = "data/user_flashcards.json";
+
+    public List<Flashcard> LoadBuiltInFlashcards()
     {
-        private const string BuiltInFile = "data/built_in_flashcards.json";
-        private const string UserFile = "data/user_flashcards.json";
+        if (!File.Exists(builtInPath))
+            return new List<Flashcard>();
 
-        public static List<Flashcard> LoadAllFlashcards()
+        string json = File.ReadAllText(builtInPath);
+        return JsonConvert.DeserializeObject<List<Flashcard>>(json, new JsonSerializerSettings
         {
-            var allCards = new List<Flashcard>();
+            TypeNameHandling = TypeNameHandling.All
+        });
+    }
 
-            allCards.AddRange(LoadFlashcardsFromFile(BuiltInFile));
-            allCards.AddRange(LoadFlashcardsFromFile(UserFile));
+    public List<Flashcard> LoadUserFlashcards()
+    {
+        if (!File.Exists(userFlashcardsPath))
+            return new List<Flashcard>();
 
-            return allCards;
-        }
-
-        private static List<Flashcard> LoadFlashcardsFromFile(string filePath)
+        string json = File.ReadAllText(userFlashcardsPath);
+        return JsonConvert.DeserializeObject<List<Flashcard>>(json, new JsonSerializerSettings
         {
-            var flashcards = new List<Flashcard>();
+            TypeNameHandling = TypeNameHandling.All
+        });
+    }
 
-            if (!File.Exists(filePath))
-                return flashcards;
+    public void SaveUserFlashcards(List<Flashcard> flashcards)
+    {
+        string json = JsonConvert.SerializeObject(flashcards, Formatting.Indented, new JsonSerializerSettings
+        {
+            TypeNameHandling = TypeNameHandling.All
+        });
 
-            string json = File.ReadAllText(filePath);
-            var rawCards = JsonSerializer.Deserialize<List<Dictionary<string, object>>>(json);
-
-            foreach (var data in rawCards)
-            {
-                string type = data["Type"].ToString();
-                int id = Convert.ToInt32(data["Id"]);
-                string chinese = data["Chinese"].ToString();
-                string pinyin = data["Pinyin"].ToString();
-                string english = data["English"].ToString();
-                int hsk = Convert.ToInt32(data["HSKLevel"]);
-
-                if (type == "Character")
-                {
-                    string radical = data["Radical"].ToString();
-                    int strokes = Convert.ToInt32(data["StrokeCount"]);
-                    flashcards.Add(new CharacterFlashcard(id, chinese, pinyin, english, hsk, radical, strokes));
-                }
-                else if (type == "Word")
-                {
-                    string example = data["Example"].ToString();
-                    string pos = data["PartOfSpeech"].ToString();
-                    flashcards.Add(new WordFlashcard(id, chinese, pinyin, english, hsk, example, pos));
-                }
-            }
-
-            return flashcards;
-        }
+        File.WriteAllText(userFlashcardsPath, json);
+    }
+    public List<Flashcard> LoadAllFlashcards()
+    {
+        var all = new List<Flashcard>();
+        all.AddRange(LoadBuiltInFlashcards());
+        all.AddRange(LoadUserFlashcards());
+        return all;
     }
 }

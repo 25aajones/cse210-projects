@@ -1,45 +1,50 @@
 using System;
 using System.Collections.Generic;
 
-namespace FinalProject
+public class SpacedRepetitionScheduler
 {
-    public class SpacedRepetitionScheduler
+    public List<Flashcard> Flashcards { get; set; }
+    public Dictionary<int, DateTime> NextReview { get; set; }
+
+    public SpacedRepetitionScheduler(List<Flashcard> flashcards)
     {
-        private Dictionary<int, DateTime> reviewSchedule = new Dictionary<int, DateTime>();
+        Flashcards = flashcards;
+        NextReview = new Dictionary<int, DateTime>();
+        ScheduleReview();
+    }
 
-        public void ScheduleNextReview(Flashcard card, bool remembered)
+    public void ScheduleReview()
+    {
+        foreach (var card in Flashcards)
         {
-            int daysUntilNextReview = remembered ? 3 : 1;
+            if (!NextReview.ContainsKey(card.Id))
+                NextReview[card.Id] = DateTime.Now;
+        }
+    }
 
-            if (reviewSchedule.ContainsKey(card.Id))
-            {
-                reviewSchedule[card.Id] = DateTime.Now.AddDays(daysUntilNextReview);
-            }
-            else
-            {
-                reviewSchedule.Add(card.Id, DateTime.Now.AddDays(daysUntilNextReview));
-            }
+    public List<Flashcard> GetDueCards()
+    {
+        List<Flashcard> due = new List<Flashcard>();
+        DateTime now = DateTime.Now;
+
+        foreach (var card in Flashcards)
+        {
+            if (NextReview.ContainsKey(card.Id) && NextReview[card.Id] <= now)
+                due.Add(card);
         }
 
-        public bool IsDueForReview(Flashcard card)
-        {
-            if (!reviewSchedule.ContainsKey(card.Id))
-                return true; // Never reviewed, so it is due
+        return due;
+    }
 
-            return DateTime.Now >= reviewSchedule[card.Id];
-        }
+    public void MarkCorrect(Flashcard card)
+    {
+        if (NextReview.ContainsKey(card.Id))
+            NextReview[card.Id] = DateTime.Now.AddDays(3);
+    }
 
-        public List<Flashcard> FilterDueCards(List<Flashcard> allCards)
-        {
-            List<Flashcard> dueCards = new List<Flashcard>();
-            foreach (var card in allCards)
-            {
-                if (IsDueForReview(card))
-                {
-                    dueCards.Add(card);
-                }
-            }
-            return dueCards;
-        }
+    public void MarkIncorrect(Flashcard card)
+    {
+        if (NextReview.ContainsKey(card.Id))
+            NextReview[card.Id] = DateTime.Now.AddDays(1);
     }
 }

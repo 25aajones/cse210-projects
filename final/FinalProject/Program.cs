@@ -1,34 +1,21 @@
 using System;
 
-namespace FinalProject
+class Program
 {
-    class Program
+    static void Main(string[] args)
     {
-        static void Main(string[] args)
+        Console.OutputEncoding = System.Text.Encoding.UTF8;
+
+        FlashcardStorage storage = new FlashcardStorage();
+        UserManager userManager = new UserManager();
+
+        
+        while (true)
         {
-            Console.WriteLine("Welcome to the Chinese Flashcard App!");
-
-            var userManager = new UserManager();
-            userManager.LoadAllUsers();
-
-            Console.Write("Enter your username: ");
-            string username = Console.ReadLine();
-
-            var user = userManager.Login(username);
-            if (user == null)
-            {
-                Console.Write("New user detected. Set your daily goal: ");
-                int dailyGoal = int.Parse(Console.ReadLine());
-                bool registered = userManager.Register(username, dailyGoal);
-                if (!registered)
-                {
-                    Console.WriteLine("Registration failed. Username may already exist.");
-                    return;
-                }
-                user = userManager.Login(username);
-            }
-
-            MainMenu.Show(user);
+            UserProfile user = userManager.LoginOrCreateUser();
+            SpacedRepetitionScheduler scheduler = new SpacedRepetitionScheduler(user.Flashcards);
+            MainMenu menu = new MainMenu(scheduler, storage, user, userManager);
+            menu.Show();
         }
     }
 }

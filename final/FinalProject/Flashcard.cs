@@ -1,25 +1,29 @@
-using System;
-
-namespace FinalProject
+public class Flashcard
 {
-    public abstract class Flashcard
+    public int Id { get; set; } 
+    public string Chinese { get; set; }
+    public string Pinyin { get; set; }
+    public string English { get; set; }
+
+    public virtual void ShowFront()
     {
-        public int Id { get; set; }
-        public string Chinese { get; set; }
-        public string Pinyin { get; set; }
-        public string English { get; set; }
-        public int HSKLevel { get; set; }
+        Console.WriteLine($"Word: {Chinese}  |  Pinyin: {Pinyin}");
+    }
 
-        public Flashcard(int id, string chinese, string pinyin, string english, int hskLevel)
-        {
-            Id = id;
-            Chinese = chinese;
-            Pinyin = pinyin;
-            English = english;
-            HSKLevel = hskLevel;
-        }
+    public virtual void ShowBack()
+    {
+        Console.WriteLine($"English: {English}");
+    }
 
-        public abstract void ShowFront();
-        public abstract void ShowBack();
+    public virtual void MarkCorrect()
+    {
+        // You could add logic like updating review time or score
+        Console.WriteLine("Marked as correct.");
+    }
+
+    public virtual void MarkIncorrect()
+    {
+        // You could add logic like rescheduling review sooner
+        Console.WriteLine("Marked as incorrect.");
     }
 }

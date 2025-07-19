@@ -1,27 +1,16 @@
 using System;
 using System.Threading;
 
-namespace FinalProject
+public class BreakManager
 {
-    public class BreakManager
+    public void StartBreak(int seconds = 5)
     {
-        private int cardsPerBreak;
-        private int breakDurationSeconds;
-
-        public BreakManager(int cardsPerBreak = 5, int breakDurationSeconds = 30)
+        Console.WriteLine($"\nTake a short break! Resuming in {seconds} seconds...");
+        for (int i = seconds; i > 0; i--)
         {
-            this.cardsPerBreak = cardsPerBreak;
-            this.breakDurationSeconds = breakDurationSeconds;
+            Console.Write($"\rResuming in {i}... ");
+            Thread.Sleep(1000);
         }
-
-        public void CheckBreak(int currentCardIndex)
-        {
-            if (currentCardIndex > 0 && currentCardIndex % cardsPerBreak == 0)
-            {
-                Console.WriteLine($"\nTake a short break! Resuming in {breakDurationSeconds} seconds...");
-                Thread.Sleep(breakDurationSeconds * 1000);
-                Console.Clear();
-            }
-        }
+        Console.WriteLine("\nBreak over. Let's continue!\n");
     }
 }

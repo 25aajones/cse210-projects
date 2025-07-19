@@ -1,44 +1,74 @@
 using System;
 using System.Collections.Generic;
 
-namespace FinalProject
+public class StudySession
 {
-    public class StudySession
+    private SpacedRepetitionScheduler _scheduler;
+
+    public StudySession(SpacedRepetitionScheduler scheduler)
     {
-        private List<Flashcard> flashcards;
-        private UserProfile user;
+        _scheduler = scheduler;
+    }
 
-        public StudySession(List<Flashcard> flashcards, UserProfile user)
+    public void BeginSession(UserProfile user)
+    {
+        Console.Clear();
+        Console.WriteLine("== Study Session Started ==\n");
+
+        List<Flashcard> dueCards = new List<Flashcard>(_scheduler.GetDueCards());
+
+        // Remove duplicates if somehow present
+        HashSet<int> seenIds = new HashSet<int>();
+        List<Flashcard> uniqueDueCards = new List<Flashcard>();
+
+        foreach (var card in dueCards)
         {
-            this.flashcards = flashcards;
-            this.user = user;
-        }
-
-        public void Start()
-        {
-            Console.WriteLine($"Starting study session for {user.Username}...\n");
-
-            foreach (Flashcard card in flashcards)
+            if (!seenIds.Contains(card.Id))
             {
-                Console.Clear();
-                card.ShowFront();
-                Console.WriteLine("\nPress Enter to flip the card...");
-                Console.ReadLine();
-
-                card.ShowBack();
-                Console.WriteLine("\nDid you remember it? (y/n): ");
-                string input = Console.ReadLine()?.Trim().ToLower();
-
-                if (input == "y")
-                {
-                    user.IncrementProgress(1);
-                }
-
-                Console.WriteLine("\nPress Enter to continue...");
-                Console.ReadLine();
+                seenIds.Add(card.Id);
+                uniqueDueCards.Add(card);
             }
-
-            Console.WriteLine($"\nSession complete! Progress: {user.Progress}/{user.DailyGoal} reviewed today.");
         }
+
+        if (uniqueDueCards.Count == 0)
+        {
+            Console.WriteLine("No flashcards due for review. Press Enter to return.");
+            Console.ReadLine();
+            return;
+        }
+
+        int reviewed = 0;
+        int total = uniqueDueCards.Count;
+
+        for (int i = 0; i < total; i++)
+        {
+            var card = uniqueDueCards[i];
+
+            Console.Clear();
+            Console.WriteLine($"== Card {i + 1} of {total} ==");
+
+            card.ShowFront();
+            Console.WriteLine("Try to think of what it means...");
+            Console.Write("Press Enter to see the answer or type 'q' to quit: ");
+            string input = Console.ReadLine().Trim().ToLower();
+
+            if (input == "q")
+                break;
+
+            card.ShowBack();
+            Console.Write("Did you get it right? (y/n): ");
+            string result = Console.ReadLine().Trim().ToLower();
+
+            if (result == "y")
+                _scheduler.MarkCorrect(card);
+            else
+                _scheduler.MarkIncorrect(card);
+
+            reviewed++;
+        }
+
+        Console.WriteLine($"\nSession complete! You reviewed {reviewed} out of {total} flashcards.");
+        Console.WriteLine("Press Enter to return to the menu.");
+        Console.ReadLine();
     }
 }

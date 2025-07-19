@@ -1,55 +1,57 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text.Json;
+using Newtonsoft.Json;
 
-namespace FinalProject
+public class UserManager
 {
-    public class UserManager
+    private readonly string userDataPath = "data/user.json";
+
+    public UserProfile LoadOrCreateUser()
     {
-        private List<UserProfile> users = new List<UserProfile>();
-        private const string UserDataFile = "users.json";
-
-        public bool Register(string username, int dailyGoal)
+        if (!File.Exists(userDataPath))
         {
-            if (users.Any(u => u.Username == username))
-                return false;
+            Console.Write("Enter your name: ");
+            string name = Console.ReadLine();
 
-            var newUser = new UserProfile(username, dailyGoal);
-            users.Add(newUser);
-            SaveAllUsers();
-            return true;
+            var newUser = new UserProfile { Name = name };
+            SaveUser(newUser);
+            return newUser;
         }
 
-        public UserProfile Login(string username)
+        string json = File.ReadAllText(userDataPath);
+        return JsonConvert.DeserializeObject<UserProfile>(json, new JsonSerializerSettings
         {
-            var user = users.FirstOrDefault(u => u.Username == username);
-            if (user == null)
-            {
-                user = UserProfile.LoadProfile(username);
-                if (user != null)
-                {
-                    users.Add(user);
-                    SaveAllUsers();
-                }
-            }
-            return user;
+            TypeNameHandling = TypeNameHandling.All
+        });
+    }
+
+    public void SaveUser(UserProfile user)
+    {
+        string json = JsonConvert.SerializeObject(user, Formatting.Indented, new JsonSerializerSettings
+        {
+            TypeNameHandling = TypeNameHandling.All
+        });
+
+        File.WriteAllText(userDataPath, json);
+    }
+
+    public UserProfile LoginOrCreateUser()
+    {
+        Console.Clear();
+        Console.Write("Enter your username: ");
+        string name = Console.ReadLine();
+        string path = $"data/user_{name}.json";
+
+        if (File.Exists(path))
+        {
+            string json = File.ReadAllText(path);
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<UserProfile>(json,
+                new Newtonsoft.Json.JsonSerializerSettings { TypeNameHandling = Newtonsoft.Json.TypeNameHandling.All });
         }
-
-        public void SaveAllUsers()
+        else
         {
-            string json = JsonSerializer.Serialize(users);
-            File.WriteAllText(UserDataFile, json);
-        }
-
-        public void LoadAllUsers()
-        {
-            if (!File.Exists(UserDataFile))
-                return;
-
-            string json = File.ReadAllText(UserDataFile);
-            users = JsonSerializer.Deserialize<List<UserProfile>>(json) ?? new List<UserProfile>();
+            Console.WriteLine("New user created.");
+            return new UserProfile { Name = name };
         }
     }
 }

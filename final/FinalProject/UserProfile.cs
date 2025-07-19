@@ -1,42 +1,29 @@
-using System;
-using System.IO;
-using System.Text.Json;
+using System.Collections.Generic;
 
-namespace FinalProject
+public class UserProfile
 {
-    public class UserProfile
+    public string Name { get; set; }
+    public string Username => Name; // For compatibility with MainMenu.cs
+
+    public int SessionsCompleted { get; set; }
+    public int DailyGoal { get; set; } = 10; // Default value
+    public int Progress => SessionsCompleted; // Reuse existing logic
+
+    public List<Flashcard> Flashcards { get; set; }
+
+    public UserProfile()
     {
-        public string Username { get; private set; }
-        public int DailyGoal { get; set; }
-        public int Progress { get; private set; }
+        Flashcards = new List<Flashcard>();
+        SessionsCompleted = 0;
+    }
 
-        public UserProfile(string username, int dailyGoal)
-        {
-            Username = username;
-            DailyGoal = dailyGoal;
-            Progress = 0;
-        }
+    public void IncrementSessions()
+    {
+        SessionsCompleted++;
+    }
 
-        public void IncrementProgress(int amount)
-        {
-            Progress += amount;
-        }
-
-        public void SaveProfile()
-        {
-            string fileName = $"user_{Username}.json";
-            string json = JsonSerializer.Serialize(this);
-            File.WriteAllText(fileName, json);
-        }
-
-        public static UserProfile LoadProfile(string username)
-        {
-            string fileName = $"user_{username}.json";
-            if (!File.Exists(fileName))
-                return null;
-
-            string json = File.ReadAllText(fileName);
-            return JsonSerializer.Deserialize<UserProfile>(json);
-        }
+    public string GetStats()
+    {
+        return $"Name: {Name}\nSessions Completed: {SessionsCompleted}\nFlashcards: {Flashcards.Count}";
     }
 }
