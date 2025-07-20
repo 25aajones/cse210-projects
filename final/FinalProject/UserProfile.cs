@@ -3,11 +3,11 @@ using System.Collections.Generic;
 public class UserProfile
 {
     public string Name { get; set; }
-    public string Username => Name; // For compatibility with MainMenu.cs
+    public string Username => Name; 
 
     public int SessionsCompleted { get; set; }
-    public int DailyGoal { get; set; } = 10; // Default value
-    public int Progress => SessionsCompleted; // Reuse existing logic
+    public int DailyGoal { get; set; } = 10; 
+    public int Progress => SessionsCompleted; 
 
     public List<Flashcard> Flashcards { get; set; }
 

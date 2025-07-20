@@ -87,7 +87,6 @@ public class MainMenu
         Console.Write("English Meaning: ");
         string english = Console.ReadLine()?.Trim();
 
-        // Check for duplicates
         bool exists = _user.Flashcards.Any(fc =>
             fc.Chinese == chinese &&
             fc.Pinyin == pinyin &&

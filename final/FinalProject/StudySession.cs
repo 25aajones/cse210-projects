@@ -17,7 +17,6 @@ public class StudySession
 
         List<Flashcard> dueCards = new List<Flashcard>(_scheduler.GetDueCards());
 
-        // Remove duplicates if somehow present
         HashSet<int> seenIds = new HashSet<int>();
         List<Flashcard> uniqueDueCards = new List<Flashcard>();
 

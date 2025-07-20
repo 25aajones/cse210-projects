@@ -14,16 +14,4 @@ public class Flashcard
     {
         Console.WriteLine($"English: {English}");
     }
-
-    public virtual void MarkCorrect()
-    {
-        // You could add logic like updating review time or score
-        Console.WriteLine("Marked as correct.");
-    }
-
-    public virtual void MarkIncorrect()
-    {
-        // You could add logic like rescheduling review sooner
-        Console.WriteLine("Marked as incorrect.");
-    }
 }
